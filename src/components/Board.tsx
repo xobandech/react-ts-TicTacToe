@@ -1,31 +1,30 @@
 import { useState } from "react";
 import calculateWinner from "./calculateWinner";
+import Square from "./Square";
 
-function Square({ value, onSquareClick }) {
-  return (
-    <button className="square" onClick={onSquareClick}>
-      {value}
-    </button>
-  );
+export type SquareValue = "X" | "O";
+
+interface HistoryItem {
+  squares: SquareValue[];
 }
 
 export default function Board() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [history, setHistory] = useState([{ squares: squares }]);
-  const [prevSquare, setPrevSquare] = useState(Math.random() > 0.5 ? "X" : "O");
-  const [stepNumber, setStepNumber] = useState(0);
+  const [squares, setSquares] = useState<SquareValue[]>(Array(9).fill(null));
+  const [history, setHistory] = useState<HistoryItem[]>([{ squares }]);
+  const [prevSquare, setPrevSquare] = useState<SquareValue>(Math.random() > 0.5 ? "X" : "O");
+  const [stepNumber, setStepNumber] = useState<number>(0);
 
-  let status;
+  let status: string;
   const current = history[stepNumber];
   const winner = calculateWinner(current.squares);
 
   if (winner) {
     status = "Winner: " + winner;
   } else {
-    status = "Next player: " + (prevSquare === "X" ? "O" : "X");
+    status = "Next player: " + (prevSquare === "X" ? "X" : "O");
   }
 
-  function handleClick(i) {
+  function handleClick(i: number) {
     const newHistory = history.slice(0, stepNumber + 1);
     const current = newHistory[newHistory.length - 1];
     const nextSquares = [...current.squares];
@@ -41,7 +40,7 @@ export default function Board() {
     setStepNumber(newHistory.length);
   }
 
-  function jumpTo(step) {
+  function jumpTo(step: number) {
     setStepNumber(step);
     setPrevSquare(step % 2 === 0 ? "X" : "O");
   }
@@ -75,5 +74,5 @@ export default function Board() {
       </div>
       <ol>{moves}</ol>
     </>
-  )
-};
+  );
+}

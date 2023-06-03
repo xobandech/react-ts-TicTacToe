@@ -1,4 +1,6 @@
-export default function calculateWinner(squares) {
+import { SquareValue } from "./Board";
+
+export default function calculateWinner(squares: SquareValue[]) {
     const lines = [
       [0, 1, 2],
       [3, 4, 5],
